@@ -88,6 +88,15 @@ h2{font-size:1.5rem;line-height:1.15;font-stretch:85%;font-weight:800;margin:0 0
 .note:empty{display:none}
 .tag{display:inline-block;font-size:.875rem;font-weight:700;color:var(--link);margin-bottom:6px}
 .note p{margin:0 0 12px}
+.res{font-size:.9375rem;border-left:4px solid var(--sea);padding-left:10px;color:var(--ink)}
+.res b{color:var(--link)}
+.warn{border:2px solid var(--band);border-radius:12px;padding:16px 18px}
+.warn h2{margin-bottom:8px}
+.warn ul{margin:8px 0 0;padding-left:20px}
+.refs{margin:0;padding:0;list-style:none;display:grid;gap:10px;font-size:.9375rem}
+.refs li{padding-left:2em;text-indent:-2em}
+.refs a{color:var(--link);overflow-wrap:anywhere}
+.rules small{display:block;margin-top:4px;color:var(--muted);font-size:.8125rem}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
 .chip{font-size:.875rem;border-radius:6px;padding:2px 8px;background:var(--bg);border:1px solid var(--line);white-space:nowrap}
 .chip.up{color:var(--good)}.chip.dn{color:var(--bad)}
@@ -174,7 +183,7 @@ svg text{font:14px Archivo,system-ui,sans-serif;fill:var(--ink);paint-order:stro
   </div>
 </section>
 <footer class="band" style="padding-top:0">
-  <p class="small">Keyboard: press 1 to 4 to pick a ruling, Enter for the next case, U to undo. Cases are fictional. Each is a workplace version of a settlement type from a student organization's discipline records, with no names or identifying details. The comparison figures are that organization's Winter 2026 records. Made by Dillon Berge for MGMT 455: Influence &amp; Negotiation.</p>
+  <p class="small">Keyboard: press 1 to 4 to pick a ruling, Enter for the next case, U to undo. Research sources are listed on the results screen. Cases are fictional. Each is a workplace version of a settlement type from a student organization's discipline records, with no names or identifying details. The comparison figures are that organization's Winter 2026 records. Made by Dillon Berge for MGMT 455: Influence &amp; Negotiation.</p>
 </footer>
 <div class="sheet" id="settings" hidden>
   <div class="card" role="dialog" aria-modal="true" aria-labelledby="settitle">
@@ -287,6 +296,23 @@ const CASES = [
     {t: "Drop it. It's only a warning.", k: "dismissed", s: "Waived", d: [-10, 2, -10], c: "Avoiding conflict",
      n: "Dropping it by default teaches that ignoring HR works."}]}
 ];
+const SRC = {
+  ostrom: ["Ostrom, E. (1990). Governing the commons: The evolution of institutions for collective action. Cambridge University Press.", "https://ostromworkshop.indiana.edu/courses-teaching/teaching-tools/ostrom-design/index.html"],
+  gneezy: ["Gneezy, U., & Rustichini, A. (2000). A fine is a price. The Journal of Legal Studies, 29(1), 1\u201317.", "https://doi.org/10.1086/468061"],
+  ball: ["Ball, G. A., Trevino, L. K., & Sims, H. P., Jr. (1994). Just and unjust punishment: Influences on subordinate performance and citizenship. Academy of Management Journal, 37(2), 299\u2013322.", "https://doi.org/10.2307/256831"],
+  nij: ["National Institute of Justice. (2016). Five things about deterrence. U.S. Department of Justice.", "https://nij.ojp.gov/topics/articles/five-things-about-deterrence"],
+  eeoc: ["U.S. Equal Employment Opportunity Commission. (n.d.). Handling internal discrimination complaints about disciplinary action.", "https://www.eeoc.gov/employers/small-business/handling-internal-discrimination-complaints-about-disciplinary-action"]
+};
+const RES = [
+  "Ostrom (1990) found that groups that govern shared resources well use graduated sanctions: penalties that start small and fit the seriousness and context of the offense.",
+  "When daycares in Israel started fining parents for late pickup, late pickups went up, and they stayed up after the fine was removed (Gneezy & Rustichini, 2000). A trade works while the rule still matters. Once a penalty feels like a price, people pay it and move on.",
+  "A study of disciplined employees and their supervisors linked how much control the employee had over the process to their citizenship behavior afterward (Ball, Trevino, & Sims, 1994). Letting him book the make-up session gives him some of that control.",
+  "Crime research summarized by the National Institute of Justice (2016) finds that the certainty of a consequence deters far more than its severity. A date you will enforce beats a harsher penalty you might not.",
+  "The EEOC tells employers that when similar infractions get different discipline, they should be able to explain why (EEOC, n.d.). A written rule is that explanation.",
+  "The same discipline study linked how harsh a punishment felt to the employee's later performance (Ball, Trevino, & Sims, 1994). Making the company whole without piling on keeps the focus on the fix.",
+  "Going easier on a friend than on others with the same infraction is the kind of difference an employer has to be able to justify if someone complains (EEOC, n.d.).",
+  "Ostrom's design principles call for sanctions that start small and rise with repeat violations (Ostrom, 1990). Jumping straight to the harshest option skips the whole ladder."
+];
 const CH = {total: 171, paid: 56, upheld: 12, dismissed: 103};
 const $ = id => document.getElementById(id);
 const clamp = v => Math.max(0, Math.min(100, v));
@@ -364,6 +390,7 @@ function renderCase(enter) {
       <div class="note" id="note">${o ? `<span class="tag">${o.c}</span>
         <div class="chips">${o.d.map((v, j) => `<span class="chip ${v > 0 ? "up" : v < 0 ? "dn" : ""}">${N[j]} ${arrow(v)}</span>`).join("")}</div>
         <p>${o.n}</p>
+        <p class="res"><b>Research:</b> ${RES[S.i]}</p>
         <div class="actions"><button type="button" class="go" id="next">${S.i + 1 < CASES.length ? "Next case" : "See your results"}<kbd>Enter</kbd></button><button type="button" class="alt" id="undo">Undo<kbd>U</kbd></button></div>` : ""}</div>
     </div></div>`;
   hud(o && fresh ? o.d : null);
@@ -471,13 +498,24 @@ function renderEnd() {
     <div class="sec"><h2>Six rules for anyone who enforces rules on people they work with</h2>
       <p class="hint">Managers, HR, shift leads, team captains: anyone who has to enforce a rule on someone they'll see tomorrow.</p>
       <ol class="rules">
-        <li><b>Treat the penalty as an opening bid</b>Ask what the team needs, then trade the penalty for it.</li>
+        <li><b>Treat the penalty as an opening bid</b>Ask what the team needs, then trade the penalty for it.<small>Graduated sanctions: Ostrom (1990)</small></li>
         <li><b>Trade, don't give</b>If you waive a penalty, get the coverage, the training or the repair in return.</li>
-        <li><b>Write the rule before the second request</b>One deal is a favor. Two is a precedent. Keep the process the same even when outcomes differ.</li>
+        <li><b>Write the rule before the second request</b>One deal is a favor. Two is a precedent. Keep the process the same even when outcomes differ.<small>Consistent discipline: EEOC (n.d.)</small></li>
         <li><b>Answer threats with questions</b>Diagnose, Express understanding, Ask, Label. Then refocus on the problem.</li>
-        <li><b>Make your own threats WISE</b>Willing to follow through, based on Interests, a way to Save face, and Exact.</li>
+        <li><b>Make your own threats WISE</b>Willing to follow through, based on Interests, a way to Save face, and Exact.<small>Certainty beats severity: NIJ (2016)</small></li>
         <li><b>Step aside for your friends</b>Who decides is part of the process. Hand the case to someone else.</li>
       </ol></div>
+    <div class="sec warn"><h2>When not to negotiate</h2>
+      <p style="margin:0">The opening-bid approach has limits, and the research shows where they are.</p>
+      <ul>
+        <li><b>Rules that protect people stay fixed.</b> Safety rules, harassment policies and anything the law requires get the same response every time.</li>
+        <li><b>A tradable penalty can turn into a price.</b> When daycares fined late parents, lateness went up, because paying the fine replaced feeling bad about being late (Gneezy &amp; Rustichini, 2000).</li>
+        <li><b>Uneven deals need a reason on paper.</b> HR is expected to explain why similar infractions got different discipline (EEOC, n.d.), so every trade should follow a written rule.</li>
+      </ul>
+      <p style="margin:10px 0 0">Use the opening bid for low-stakes rules where the goal is getting something done: coverage, training, a repair.</p></div>
+    <div class="sec"><h2>The research behind this game</h2>
+      <p class="hint">Course concepts plus outside research. Each case note cites the study it draws on.</p>
+      <ul class="refs">${Object.values(SRC).sort((a, b) => a[0].localeCompare(b[0])).map(([t, u]) => `<li>${t} <a href="${u}" target="_blank" rel="noopener">${u}</a></li>`).join("")}</ul></div>
     <p class="sec"><button type="button" class="go" id="again">Take the desk again</button></p>
   </div>`;
   plot();
