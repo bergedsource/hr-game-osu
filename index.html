@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're the HR Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,400..800;1,62..125,400..800&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday learning game, plainspoken, a little wry
+   IDEA the HR manager's desk: a canary carbon corrective-action form you rule on with a red rubber stamp
+   PICTURE the corrective-action form, large, stamped by your ruling; at the end a Dual Concerns plot and your stack of stamped slips
+   COLOUR cobalt header and meter strip, white desk, canary slips, red stamp ink
+   TYPE Archivo (condensed for display, normal for text) + Courier Prime for the typed form fields
+   LAYOUT laptop: title band, sticky meter strip, slip left and ruling right; phone: title, meters, slip, ruling */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0f1115);--ink:light-dark(#14161a,#eceef2);--muted:light-dark(#555b65,#a5abb6);--band:light-dark(#1f47c8,#18348f);--band2:light-dark(#1a3db0,#132a75);--panel:light-dark(#f3f5fa,#171a21);--line:light-dark(#d9dee8,#2c313c);--slip:#ffe48a;--slipink:#1b1d22;--rule:#8ea6e0;--stamp:#c81e24;--good:light-dark(#11703a,#5fd08c);--bad:light-dark(#b3261e,#ff8a80)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;font-stretch:100%;overflow-x:clip}
+.band{padding-block:clamp(22px,3vw,40px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+header.band{background:var(--band);color:#fff;padding-bottom:18px}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 32px}
+h1{font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-.02em;font-weight:800;font-stretch:75%;margin:0;text-wrap:balance}
+.lede{margin:8px 0 0;max-width:60ch;color:#dfe6ff;font-size:17px}
+.count{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.count b{font-size:20px;font-stretch:80%;white-space:nowrap}
+.ghost{font:inherit;font-size:15px;color:#fff;background:transparent;border:2px solid #ffffff80;border-radius:8px;min-height:44px;padding:0 14px;cursor:pointer}
+.ghost:hover{border-color:#fff}
+#meters{position:sticky;top:0;z-index:5;background:var(--band2);color:#fff;padding:10px max(5vw,16px)}
+.mgrid{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 28px}
+.meter .row{display:flex;justify-content:space-between;gap:8px;font-size:15px}
+.meter .row span:last-child{flex:none;font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+.track{height:10px;border-radius:5px;background:#ffffff33;overflow:hidden;margin-top:4px}
+.fill{height:100%;background:var(--slip);border-radius:5px;transition:width .5s ease}
+.delta{font-size:13px;margin-left:6px;padding:0 6px;border-radius:4px;background:#ffffff26}
+main .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,3vw,44px);align-items:start}
+.slip{position:relative;background:var(--slip);color:var(--slipink);border-radius:6px;padding:30px clamp(18px,3vw,34px) 26px;box-shadow:0 1px 0 #0000001a,0 10px 24px -12px #00000066;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,#8ea6e055 33px 34px);background-position:0 74px}
+.slip::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:radial-gradient(circle at 7px 0,var(--bg) 4px,transparent 4.5px) 0 0/14px 10px repeat-x}
+.slip .head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:700 15px/1.3 "Courier Prime",monospace;border-bottom:2px solid var(--slipink);padding-bottom:8px}
+.fields{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;margin:14px 0 0;font:16px/1.7 "Courier Prime",monospace}
+.fields dt{font-weight:700}
+.fields dd{margin:0}
+.says{margin:18px 0 0;font-size:clamp(20px,2.4vw,25px);line-height:1.35;font-style:italic;font-weight:500}
+.sys{margin:14px 0 0;font:15px/1.5 "Courier Prime",monospace;border-left:4px solid var(--slipink);padding-left:10px}
+.rule{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;min-height:64px;font:700 16px "Courier Prime",monospace}
+.wait{border:2px dashed #1b1d2266;border-radius:8px;padding:8px 14px;font:400 15px "Courier Prime",monospace;color:#1b1d22aa}
+.stamp{display:inline-block;transform:rotate(-6deg);border:4px solid var(--stamp);color:var(--stamp);border-radius:8px;padding:4px 14px;font-weight:800;font-stretch:70%;font-size:clamp(24px,3.4vw,36px);letter-spacing:.02em;text-transform:uppercase;opacity:.9;mix-blend-mode:multiply;white-space:nowrap}
+.stamp.hit{animation:thump .35s cubic-bezier(.2,1.4,.5,1)}
+@keyframes thump{from{transform:rotate(-6deg) scale(1.9);opacity:0}to{transform:rotate(-6deg) scale(1);opacity:.9}}
+h2{font-size:24px;line-height:1.15;font-stretch:85%;font-weight:800;margin:0 0 12px}
+.opts{display:grid;gap:10px}
+.opt{font:inherit;font-size:16px;text-align:left;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:12px 14px;min-height:52px;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--band)}
+.opt:focus-visible,.ghost:focus-visible,.go:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+.opt:disabled{cursor:default;opacity:.45}
+.opt.picked{opacity:1;border-color:var(--stamp);background:color-mix(in srgb,var(--stamp) 8%,var(--bg))}
+.note{margin-top:16px;background:var(--panel);border-radius:10px;padding:16px 18px}
+.note:empty{display:none}
+.tag{display:inline-block;font-size:14px;font-weight:700;color:var(--band);margin-bottom:4px}
+:root[data-theme=dark] .tag{color:#9fb4ff}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .tag{color:#9fb4ff}}
+.note p{margin:0 0 10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.chip{font-size:14px;border-radius:6px;padding:2px 8px;background:var(--bg);border:1px solid var(--line);white-space:nowrap}
+.up{color:var(--good)}.dn{color:var(--bad)}
+.go{font:inherit;font-weight:700;font-size:16px;color:#fff;background:var(--band);border:0;border-radius:10px;min-height:48px;padding:0 20px;cursor:pointer}
+.go:hover{background:var(--band2)}
+.key{border-top:1px solid var(--line)}
+.key .wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 32px;font-size:15px;color:var(--muted)}
+.key b{color:var(--ink);display:block}
+.small{font-size:14px;color:var(--muted);max-width:1240px;margin:0 auto}
+.fig{position:relative;min-height:340px;background:var(--panel);border-radius:10px}
+.fig>svg{position:absolute;inset:0;width:100%;height:100%}
+svg text{font:14px Archivo,system-ui,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:4px}
+.big{font-size:clamp(36px,5vw,52px);line-height:1.05;font-weight:800;font-stretch:75%;margin:0 0 8px;letter-spacing:-.02em}
+.bars{display:grid;gap:12px;margin:18px 0}
+.bar .row{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.bar .row span:last-child{flex:none;white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
+.bar .track{background:var(--line);height:14px}
+.bar .fill{background:var(--band)}
+.bar.me .fill{background:var(--stamp)}
+.stack{display:flex;height:22px;border-radius:5px;overflow:hidden;margin-top:6px}
+.stack span{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin-top:6px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.docket{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.mini{background:var(--slip);color:var(--slipink);border-radius:6px;padding:10px 12px;font-size:14px;line-height:1.35}
+.mini b{display:block;font:700 13px "Courier Prime",monospace}
+.mini em{display:inline-block;margin-top:6px;font-style:normal;font-weight:800;font-stretch:75%;color:var(--stamp);border:2px solid var(--stamp);border-radius:4px;padding:0 6px;transform:rotate(-4deg)}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 28px;margin:0;padding:0;list-style:none;counter-reset:r}
+.rules li{counter-increment:r;border-top:3px solid var(--band);padding-top:10px}
+.rules li b{display:block;font-size:18px;font-stretch:85%;margin-bottom:2px}
+.end .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(20px,3vw,44px);align-items:stretch}
+.sec{margin-top:clamp(28px,4vw,48px)}
+@media (max-width:900px){.docket{grid-template-columns:repeat(2,minmax(0,1fr))}.rules{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:720px){main .wrap,.end .grid{grid-template-columns:minmax(0,1fr)}.key .wrap{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:600px){.mgrid{gap:6px 12px}.meter .row{font-size:13px;flex-wrap:wrap}.delta{display:none}.rules{grid-template-columns:minmax(0,1fr)}.fields{grid-template-columns:minmax(0,1fr);gap:0}.fields dd{margin-bottom:6px}}
+@media (prefers-reduced-motion:reduce){.stamp.hit{animation:none}.fill{transition:none}}
+</style>
+</head>
+<body>
+<header class="band">
+  <div class="wrap top">
+    <div>
+      <h1>You're the HR Manager</h1>
+      <p class="lede">Eight corrective-action cases are on your desk: missed shifts, skipped trainings, a broken machine, a friend who keeps showing up late. Every ruling moves three meters. Decide each one, then see where you land as a negotiator.</p>
+    </div>
+    <div class="count"><b id="counter">Case 1 of 8</b><button class="ghost" id="restart" type="button">Start over</button></div>
+  </div>
+</header>
+<div id="meters" aria-label="Meters">
+  <div class="mgrid" id="mgrid"></div>
+</div>
+<main class="band" id="game"></main>
+<section class="band key" aria-label="What the meters mean">
+  <div class="wrap">
+    <div><b>Compliance</b>Did the company get what the policy is for: the coverage, the training, the work.</div>
+    <div><b>Relationships</b>How the employee, and the coworkers watching, feel about how you treated them.</div>
+    <div><b>Precedent</b>Whether your rulings are consistent enough that the next person can predict them.</div>
+  </div>
+</section>
+<footer class="band" style="padding-top:0">
+  <p class="small">Cases are fictional. Each is a workplace version of a settlement type from a student organization's discipline records, with no names or identifying details. The comparison figures are that organization's Winter 2026 records. Made by Dillon Berge for MGMT 455: Influence &amp; Negotiation.</p>
+</footer>
+<script>
+{
+const N = ["Compliance", "Relationships", "Precedent"];
+const labor2 = s => s.picks[1] === 0 || s.picks[1] === 2;
+const CASES = [
+  {no: "0141", title: "Missed a required Saturday inventory count", act: "Attendance point",
+   says: () => "My car died on the way in Saturday. I came in Sunday and finished the whole count before anyone asked.",
+   opts: () => [
+    {t: "Issue the attendance point. Policy is policy.", k: "upheld", s: "Point issued", d: [0, -12, 6], c: "Interests vs. positions",
+     n: "You held the line, but the company already got its count. Penalizing anyway turns a task conflict into a relationship conflict, and it tells everyone that making it right earns nothing."},
+    {t: "Waive it. The company got what it needed.", k: "dismissed", s: "Waived", d: [8, 10, 0], c: "Interests vs. positions",
+     n: "The point was leverage, not the goal. The goal was a finished count, and she delivered it. A late finish followed by a waived penalty shows up again and again in the records behind this game."},
+    {t: "Log half a point for finishing late.", k: "upheld", s: "Half point", d: [4, 0, -4], c: "Compromising vs. integrating",
+     n: "Splitting the difference feels balanced, but it is a compromise nobody asked for. A half-point rule that doesn't exist will also get argued about in the next case."}]},
+  {no: "0147", title: "Missed a scheduled shift", act: "Attendance point",
+   says: () => "Can I pick up two extra shifts this week instead of taking the point?",
+   opts: () => [
+    {t: "Accept the two shifts.", k: "deal", s: "Made up", d: [14, 8, -4], c: "Integrative trade",
+     n: "Logrolling: the company values coverage more than a point on his record, and he values a clean record more than two extra shifts, so both come out ahead. Watch the precedent, though. Coworkers will hear about this deal."},
+    {t: "No. The point stands.", k: "upheld", s: "Point issued", d: [2, -6, 6], c: "Interests vs. positions",
+     n: "Simple and consistent, but the schedule is still short a shift. A penalty punishes; it doesn't fix the problem the policy was for."},
+    {t: "Accept one extra shift instead of two.", k: "deal", s: "Made up", d: [8, 12, -4], c: "Negotiating against yourself",
+     n: "He opened at two shifts and you cut your own side of the deal before he asked. Generous, but that is negotiating against yourself."}]},
+  {no: "0152", title: "Missed mandatory safety training", act: "Written warning",
+   says: () => "If you write me up for this, I'm done covering weekends. Nobody told me it was mandatory.",
+   opts: () => [
+    {t: "Issue the warning and quote the policy back to him.", k: "upheld", s: "Warning issued", d: [4, -14, 4], c: "Threat rigidity",
+     n: "Correct on paper, but meeting a threat with a rule invites threat rigidity on both sides. He digs in, and now the fight is about respect, not training."},
+    {t: "Ask what happened, show him the calendar invite, then let him book the make-up session.", k: "upheld", s: "Warning issued", d: [8, 8, 8], c: "DEALing with threats",
+     n: "That is DEAL. Diagnose the threat (he sounds more like a frustrated victim than a bluffer), Express understanding, Ask questions, then Label the threat and refocus on the training. The invite went out, so the warning stands, and he accepts it without losing face."},
+    {t: "Drop it so he keeps covering weekends.", k: "dismissed", s: "Waived", d: [-8, 4, -12], c: "Rewarding threats",
+     n: "The threat worked. Everyone who hears about it now knows the move, and the next threat will be bigger."}]},
+  {no: "0158", title: "Three overdue compliance trainings", act: "Written warning",
+   says: () => "I'm slammed until the quarter closes on the 15th. I'll do them right after, I promise.",
+   opts: () => [
+    {t: "Issue a final warning now.", k: "escalated", s: "Final warning", d: [4, -10, 2], c: "Threats as a last resort",
+     n: "She can't do them this week, so this adds punishment without getting a single training done. A threat does its work before it's carried out, not as the first move."},
+    {t: "Due by the 15th. System access pauses on the 16th if they aren't done.", k: "extended", s: "Extended", d: [10, 6, 8], c: "WISE threats",
+     n: "A WISE threat: you are Willing to follow through, it rests on the company's Interest in finished trainings, it lets her Save face by finishing on time, and it's Exact."},
+    {t: "Block two hours on her calendar this week for them.", k: "deal", s: "Scheduled", d: [6, 8, 2], c: "Equality",
+     n: "Practical, since the trainings get done inside a schedule she already has. Offer it to everyone, or it becomes a favor only some people know to ask for."},
+    {t: "Take her word. She'll do them when she can.", k: "extended", s: "Open extension", d: [-6, 6, -6], c: "Exact terms",
+     n: "A promise with no date isn't a deal. Open-ended extensions are how penalties drift into being dropped by default."}]},
+  {no: "0163", title: "Skipped the client appreciation event", act: "Attendance point",
+   says: s => labor2(s) ? "You let someone pick up extra shifts instead of taking a point. I want the same deal. I'll stay late Thursday."
+                       : "I heard someone asked to make up a missed shift. Can I make mine up anyway? I'll stay late Thursday.",
+   opts: s => labor2(s) ? [
+    {t: "Yes. Same deal as the missed shift.", k: "deal", s: "Made up", d: [6, 8, 4], c: "Equality",
+     n: "Equality: the same deal for everyone, which is easy to defend. But staying late Thursday doesn't fix a missed client event the way an extra shift fixes a missed shift."},
+    {t: "No. A missed client event can't be made up with hours.", k: "upheld", s: "Point issued", d: [2, -8, -6], c: "Equity vs. equality",
+     n: "You may be right on equity, since extra hours fix missing coverage and not a missing face at a client event. Without a written rule, though, it looks like favoritism, and \"everyone else got a deal\" starts here."},
+    {t: "Yes, and post a written list of which penalties can be made up.", k: "deal", s: "Made up", d: [8, 6, 14], c: "Procedural justice",
+     n: "Procedural justice: when the process is fair and public, people accept outcomes even when they get less. One deal was a favor; a written rule makes it a policy."}] : [
+    {t: "Yes. Let him make it up this time.", k: "deal", s: "Made up", d: [6, 8, -10], c: "Precedent",
+     n: "Now two people made the same request and got different answers. The first one will hear about it, and \"everyone else got a deal\" starts here."},
+    {t: "No. Same answer as the missed shift: the point stands.", k: "upheld", s: "Point issued", d: [2, -4, 6], c: "Equality",
+     n: "Consistent with last week's ruling, so it's easy to defend. A useful trade went unused, though."},
+    {t: "Yes, and post a written list of which penalties can be made up.", k: "deal", s: "Made up", d: [8, 6, 14], c: "Procedural justice",
+     n: "Procedural justice: when the process is fair and public, people accept outcomes even when they get less. Changing course is fine when the new rule is written down and applies to everyone."}]},
+  {no: "0170", title: "Broke the break-room espresso machine", act: "Written warning",
+   says: () => "That's on me. I'll buy a new one and set it up this weekend.",
+   opts: () => [
+    {t: "Deal: she replaces it and there's no warning.", k: "deal", s: "Repaired", d: [12, 10, 0], c: "Integrative settlement",
+     n: "The company gets made whole, which is what it needed. Fixing what you broke is one of the deals that keeps showing up in the records behind this game."},
+    {t: "She replaces it and gets the warning.", k: "upheld", s: "Warning + repair", d: [8, -4, 4], c: "Equity",
+     n: "Defensible: the warning covers the conduct and the new machine covers the damage. The cost is goodwill, and owning up quickly earned her nothing."},
+    {t: "She gets the warning and the company buys a new machine.", k: "upheld", s: "Warning issued", d: [-6, 0, -2], c: "Interests vs. positions",
+     n: "The company pays for her mistake while she gets the cheaper deal. That's backwards from what the policy is for."}]},
+  {no: "0176", title: "Your close friend on the team was late four times", act: "Written warning",
+   says: () => "Come on, it's me. Just make it go away.",
+   opts: () => [
+    {t: "Make it go away.", k: "dismissed", s: "Waived", d: [-6, 6, -16], c: "Principal-agent problem",
+     n: "This is the principal-agent problem. In HR you act for the company, and here your own interest (a friend) beat the company's (rules that apply to everyone). People notice."},
+    {t: "Give him the same options as anyone else.", k: "upheld", s: "Warning issued", d: [6, -4, 10], c: "Task vs. relationship conflict",
+     n: "Consistent, and it may sting. Say out loud that this is about being on time, not the friendship, so a task conflict doesn't become a relationship conflict."},
+    {t: "Hand his case to another HR partner.", k: "referred", s: "Referred", d: [4, 2, 14], c: "Procedural justice",
+     n: "Stepping aside protects the process and the friendship. Fair procedures help people accept outcomes, even ones they don't like, and who decides is part of the procedure."}]},
+  {no: "0183", title: "Written warning unanswered for 30 days", act: "Written warning",
+   says: () => "(No reply to three meeting requests.)",
+   sys: "The HR system used to finalize unanswered warnings automatically. That changed this year: now a person decides.",
+   opts: () => [
+    {t: "Finalize it as is.", k: "upheld", s: "Finalized", d: [4, -6, 6], c: "Avoiding conflict",
+     n: "This is what the system used to do automatically. It's consistent, but silence can be avoidance rather than defiance, and a ruling alone doesn't start a conversation."},
+    {t: "Message him: meet by Friday, or the warning is finalized without his side of the story.", k: "extended", s: "Extended", d: [10, 4, 8], c: "WISE threats",
+     n: "A WISE threat aimed at someone who is avoiding you: an exact date, a consequence tied to his own interest in being heard, and an easy way to settle with his dignity intact."},
+    {t: "Start a termination review.", k: "escalated", s: "Termination review", d: [6, -16, -4], c: "Proportion",
+     n: "Far too big for an unanswered warning. A response out of proportion to the offense makes the threat look personal and uses up leverage you'll want later."},
+    {t: "Drop it. It's only a warning.", k: "dismissed", s: "Waived", d: [-10, 2, -10], c: "Avoiding conflict",
+     n: "Dropping it by default teaches that ignoring HR works."}]}
+];
+const CH = {total: 171, paid: 56, upheld: 12, dismissed: 103};
+const $ = id => document.getElementById(id);
+const clamp = v => Math.max(0, Math.min(100, v));
+let S = {i: 0, m: [50, 50, 50], picks: [], last: null};
+
+function meters(d) {
+  $("mgrid").innerHTML = N.map((name, j) => {
+    const dv = d ? d[j] : 0;
+    const chip = d ? `<span class="delta">${dv > 0 ? "+" : ""}${dv}</span>` : "";
+    return `<div class="meter"><div class="row"><span>${name}${chip}</span><span>${S.m[j]}</span></div>
+      <div class="track" role="meter" aria-label="${name}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${S.m[j]}"><div class="fill" style="width:${S.m[j]}%"></div></div></div>`;
+  }).join("");
+}
+
+function renderCase() {
+  const c = CASES[S.i], opts = c.opts(S), pick = S.picks[S.i];
+  $("counter").textContent = `Case ${S.i + 1} of ${CASES.length}`;
+  const o = pick != null ? opts[pick] : null;
+  $("game").innerHTML = `<div class="wrap">
+    <article class="slip" aria-label="Corrective action form">
+      <div class="head"><span>Human Resources</span><span>Corrective action No. ${c.no}</span></div>
+      <dl class="fields"><dt>Employee</dt><dd>Team member (name withheld)</dd><dt>Issue</dt><dd>${c.title}</dd><dt>Proposed</dt><dd>${c.act}</dd><dt>Status</dt><dd>${o ? "Ruled" : "Unresolved"}</dd></dl>
+      <p class="says">${c.says(S)}</p>
+      ${c.sys ? `<p class="sys">${c.sys}</p>` : ""}
+      <div class="rule"><span>Ruling</span>${o ? `<span class="stamp${S.last === S.i ? " hit" : ""}">${o.s}</span>` : `<span class="wait">Awaiting your ruling</span>`}</div>
+    </article>
+    <div>
+      <h2>Your ruling</h2>
+      <div class="opts">${opts.map((x, j) => `<button type="button" class="opt${pick === j ? " picked" : ""}" data-j="${j}" ${pick != null ? "disabled" : ""}>${x.t}</button>`).join("")}</div>
+      <div class="note" id="note" aria-live="polite">${o ? `<span class="tag">${o.c}</span>
+        <div class="chips">${o.d.map((v, j) => `<span class="chip ${v > 0 ? "up" : v < 0 ? "dn" : ""}">${N[j]} ${v > 0 ? "+" : ""}${v}</span>`).join("")}</div>
+        <p>${o.n}</p>
+        <button type="button" class="go" id="next">${S.i + 1 < CASES.length ? "Next case" : "Close the case files"}</button>` : ""}</div>
+    </div></div>`;
+  meters(o && S.last === S.i ? o.d : null);
+}
+
+function choose(j) {
+  const o = CASES[S.i].opts(S)[j];
+  S.picks[S.i] = j;
+  S.m = S.m.map((v, k) => clamp(v + o.d[k]));
+  S.last = S.i;
+  renderCase();
+  const nx = $("next");
+  if (nx) nx.focus({preventScroll: true});
+}
+
+function style(c, r) {
+  if (c >= 40 && c <= 60 && r >= 40 && r <= 60) return ["Compromising", "The splitter", "You met in the middle on most cases. Safe, but trades that helped both the company and the employee were usually on the table."];
+  if (c >= 50 && r >= 50) return ["Integrating", "The dealmaker", "You kept the work getting done and kept people on your side: high concern for the company and for the employee. That corner is where penalties turn into trades."];
+  if (c >= 50) return ["Dominating", "The hammer", "The policy held, but people paid for it in goodwill. Expect more pushback and fewer people owning up."];
+  if (r >= 50) return ["Obliging", "The soft touch", "People like you, but the company kept losing coverage and finished work. Your penalties stopped working as leverage."];
+  return ["Avoiding", "The empty office", "Neither the company nor its people came out ahead. Most rulings cost something and bought nothing back."];
+}
+
+function plot() {
+  const s = $("dc");
+  if (!s) return;
+  const W = s.clientWidth, H = s.clientHeight, narrow = W < 520;
+  if (W < 120 || H < 120) return;
+  const L = 34, R = 14, T = 14, B = 40, w = W - L - R, h = H - T - B;
+  const x = v => L + v / 100 * w, y = v => T + (1 - v / 100) * h;
+  const q = [[0, 50, "Obliging", 0, 0], [50, 50, "Integrating", 1, 0], [0, 0, "Avoiding", 0, 1], [50, 0, "Dominating", 1, 1]];
+  const me = [S.m[0], S.m[1]];
+  s.innerHTML = q.map(([qx, qy, lab, rt, bt]) => `<rect x="${x(qx)}" y="${y(qy + 50)}" width="${w / 2}" height="${h / 2}" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="${rt ? x(qx + 50) - 10 : x(qx) + 10}" y="${bt ? y(qy) - 10 : y(qy + 50) + 22}" text-anchor="${rt ? "end" : "start"}">${lab}</text>`).join("")
+    + `<rect x="${x(40)}" y="${y(60)}" width="${w / 5}" height="${h / 5}" fill="none" stroke="var(--muted)" stroke-dasharray="4 4"/>
+      <text x="${x(50)}" y="${y(60) - 6}" text-anchor="middle" style="font-size:13px">${narrow ? "Middle" : "Compromising"}</text>
+      <text x="${L + w / 2}" y="${H - 10}" text-anchor="middle">${narrow ? "Concern for the company" : "Concern for the company (compliance)"}</text>
+      <text transform="translate(16 ${T + h / 2}) rotate(-90)" text-anchor="middle">${narrow ? "Concern for the employee" : "Concern for the employee (relationships)"}</text>
+      <circle cx="${x(me[0])}" cy="${y(me[1])}" r="11" fill="var(--stamp)" stroke="var(--bg)" stroke-width="3"/>
+      <text x="${x(me[0]) + (me[0] > 80 ? -18 : 18)}" y="${y(me[1]) + 5}" text-anchor="${me[0] > 80 ? "end" : "start"}" style="font-weight:700">You</text>`;
+}
+
+function renderEnd() {
+  $("counter").textContent = "Desk cleared";
+  meters(null);
+  const res = CASES.map((c, i) => c.opts(S)[S.picks[i]]);
+  const soft = res.filter(o => o.k === "dismissed" || o.k === "deal").length;
+  const pct = Math.round(soft / CASES.length * 100);
+  const [c, r, p] = S.m, [sty, nick, why] = style(c, r);
+  const prec = p >= 65 ? "People can predict your rulings, so fewer of them will argue." : p >= 40 ? "Some of your rulings will get cited against you." : "Expect to hear \"everyone else got a deal\" a lot.";
+  const sh = k => Math.round(CH[k] / CH.total * 100);
+  $("game").innerHTML = `<div class="wrap end" style="display:block">
+    <div class="grid">
+      <div class="fig" aria-label="Dual Concerns plot with your position"><svg id="dc" role="img" aria-label="Your position: compliance ${c}, relationships ${r}"></svg></div>
+      <div>
+        <p class="big">${nick}</p>
+        <p style="margin:0 0 6px"><b>${sty} style.</b> ${why} Precedent ended at ${p}. ${prec}</p>
+        <div class="bars">
+          <div class="bar me"><div class="row"><span>You waived or settled with a deal</span><span>${soft} of 8 (${pct}%)</span></div><div class="track"><div class="fill" style="width:${pct}%"></div></div></div>
+          <div class="bar"><div class="row"><span>Student committee dismissed, Winter 2026</span><span>${CH.dismissed} of ${CH.total} (${sh("dismissed")}%)</span></div><div class="track"><div class="fill" style="width:${sh("dismissed")}%"></div></div></div>
+        </div>
+        <p style="margin:0">Where these cases come from: I chair the discipline committee of a student organization. In Winter 2026 it logged 171 fines, mostly $10, and dismissed 60% of them. That looks soft until you read the notes, which show the same deals over and over: work instead of cash, a late finish, partial credit, a repair. A penalty works like an opening bid. It gives whoever enforces the rule leverage to trade for what the group needs, at a club or at a company.</p>
+        <div class="stack" aria-label="How the committee's 171 Winter 2026 fines ended">
+          <span style="width:${CH.paid / CH.total * 100}%;background:var(--band)"></span><span style="width:${CH.upheld / CH.total * 100}%;background:var(--stamp)"></span><span style="width:${CH.dismissed / CH.total * 100}%;background:var(--slip)"></span>
+        </div>
+        <div class="legend"><span><i style="background:var(--band)"></i>Paid ${CH.paid} (${sh("paid")}%)</span><span><i style="background:var(--stamp)"></i>Upheld, still owed ${CH.upheld} (${sh("upheld")}%)</span><span><i style="background:var(--slip)"></i>Dismissed ${CH.dismissed} (${sh("dismissed")}%)</span></div>
+      </div>
+    </div>
+    <div class="sec"><h2>Your case files</h2><div class="docket">${CASES.map((cs, i) => `<div class="mini"><b>No. ${cs.no}</b>${cs.title}<br><em>${res[i].s}</em></div>`).join("")}</div></div>
+    <div class="sec"><h2>Six rules for anyone who enforces rules on people they work with</h2>
+      <p style="margin:-4px 0 14px;color:var(--muted)">Managers, HR, shift leads, team captains: anyone who has to enforce a rule on someone they'll see tomorrow.</p>
+      <ol class="rules">
+        <li><b>Treat the penalty as an opening bid</b>Ask what the team needs, then trade the penalty for it.</li>
+        <li><b>Trade, don't give</b>If you waive a penalty, get the coverage, the training or the repair in return.</li>
+        <li><b>Write the rule before the second request</b>One deal is a favor. Two is a precedent. Keep the process the same even when outcomes differ.</li>
+        <li><b>Answer threats with questions</b>Diagnose, Express understanding, Ask, Label. Then refocus on the problem.</li>
+        <li><b>Make your own threats WISE</b>Willing to follow through, based on Interests, a way to Save face, and Exact.</li>
+        <li><b>Step aside for your friends</b>Who decides is part of the process. Hand the case to someone else.</li>
+      </ol></div>
+    <p class="sec"><button type="button" class="go" id="again">Take the desk again</button></p>
+  </div>`;
+  plot();
+}
+
+function render() { S.i >= CASES.length ? renderEnd() : renderCase(); }
+
+$("game").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  if (b.classList.contains("opt") && S.picks[S.i] == null) choose(+b.dataset.j);
+  else if (b.id === "next") { S.i++; S.last = null; render(); window.scrollTo({top: 0, behavior: "smooth"}); }
+  else if (b.id === "again") reset();
+});
+function reset() { S = {i: 0, m: [50, 50, 50], picks: [], last: null}; render(); window.scrollTo({top: 0}); }
+$("restart").addEventListener("click", reset);
+const ro = new ResizeObserver(() => plot());
+ro.observe(document.body);
+
+function start(data) {
+  if (data && Array.isArray(data.m) && Array.isArray(data.picks) && typeof data.i === "number") S = {i: data.i, m: data.m, picks: data.picks, last: null};
+  render();
+}
+window.claude?.hot?.snapshot?.(() => S);
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+}
+</script>
+</body>
+</html>
