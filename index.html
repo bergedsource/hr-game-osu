@@ -10,96 +10,139 @@
 <style>
 /* VOICE everyday learning game, plainspoken, a little wry
    IDEA the HR manager's desk: a canary carbon corrective-action form you rule on with a red rubber stamp
-   PICTURE the corrective-action form, large, stamped by your ruling; at the end a Dual Concerns plot and your stack of stamped slips
-   COLOUR cobalt header and meter strip, white desk, canary slips, red stamp ink
-   TYPE Archivo (condensed for display, normal for text) + Courier Prime for the typed form fields
-   LAYOUT laptop: title band, sticky meter strip, slip left and ruling right; phone: title, meters, slip, ruling */
-:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0f1115);--ink:light-dark(#14161a,#eceef2);--muted:light-dark(#555b65,#a5abb6);--band:light-dark(#1f47c8,#18348f);--band2:light-dark(#1a3db0,#132a75);--panel:light-dark(#f3f5fa,#171a21);--line:light-dark(#d9dee8,#2c313c);--slip:#ffe48a;--slipink:#1b1d22;--rule:#8ea6e0;--stamp:#c81e24;--good:light-dark(#11703a,#5fd08c);--bad:light-dark(#b3261e,#ff8a80)}
+   PICTURE the form, large, stamped by your ruling; a HUD of case pips and three meters; at the end a Dual Concerns plot and your stack of stamped forms
+   COLOUR cobalt header and HUD, white desk, canary forms, red stamp ink
+   TYPE Archivo (condensed for display) + Archivo text + Courier Prime for typed form fields
+   LAYOUT laptop: title band, sticky HUD, form left and ruling right; phone: title, HUD, form, ruling, sticky action row */
+:root{color-scheme:light dark;--scale:1;--bg:light-dark(#ffffff,#0f1115);--ink:light-dark(#14161a,#eceef2);--muted:light-dark(#555b65,#a5abb6);--band:light-dark(#1f47c8,#18348f);--band2:light-dark(#1a3db0,#132a75);--panel:light-dark(#f3f5fa,#171a21);--line:light-dark(#cfd5e1,#2f3541);--slip:#ffe48a;--slipink:#1b1d22;--stamp:#c81e24;--good:light-dark(#0f6b37,#6fdc9a);--bad:light-dark(#b3261e,#ff8f86);--link:light-dark(#1f47c8,#9fb4ff)}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
+html{font-size:calc(16px * var(--scale))}
 *{box-sizing:border-box;min-width:0}
 html,body{margin:0}
-body{background:var(--bg);color:var(--ink);font:16px/1.55 Archivo,system-ui,sans-serif;font-stretch:100%;overflow-x:clip}
-.band{padding-block:clamp(22px,3vw,40px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
+body{background:var(--bg);color:var(--ink);font:1rem/1.55 Archivo,system-ui,sans-serif;overflow-x:clip}
+button{font:inherit}
+.band{padding-block:clamp(20px,3vw,36px);padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
 .wrap{max-width:1240px;margin:0 auto}
-header.band{background:var(--band);color:#fff;padding-bottom:18px}
+header.band{background:var(--band);color:#fff;padding-bottom:16px}
 .top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 32px}
-h1{font-size:clamp(32px,5vw,52px);line-height:1.05;letter-spacing:-.02em;font-weight:800;font-stretch:75%;margin:0;text-wrap:balance}
-.lede{margin:8px 0 0;max-width:60ch;color:#dfe6ff;font-size:17px}
-.count{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.count b{font-size:20px;font-stretch:80%;white-space:nowrap}
-.ghost{font:inherit;font-size:15px;color:#fff;background:transparent;border:2px solid #ffffff80;border-radius:8px;min-height:44px;padding:0 14px;cursor:pointer}
-.ghost:hover{border-color:#fff}
-#meters{position:sticky;top:0;z-index:5;background:var(--band2);color:#fff;padding:10px max(5vw,16px)}
-.mgrid{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 28px}
-.meter .row{display:flex;justify-content:space-between;gap:8px;font-size:15px}
-.meter .row span:last-child{flex:none;font-variant-numeric:tabular-nums;font-weight:700;white-space:nowrap}
+h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.05;letter-spacing:-.02em;font-weight:800;font-stretch:75%;margin:0;text-wrap:balance}
+.lede{margin:8px 0 0;max-width:60ch;color:#e3e9ff;font-size:1.0625rem}
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ghost{color:#fff;background:transparent;border:2px solid #ffffff8c;border-radius:10px;min-height:44px;padding:0 14px;cursor:pointer;font-size:.9375rem}
+.ghost:hover{border-color:#fff;background:#ffffff14}
+.ghost[aria-expanded=true]{background:#fff;color:var(--band)}
+#hud{position:sticky;top:0;z-index:5;background:var(--band2);color:#fff;padding:10px max(5vw,16px) 12px;box-shadow:0 6px 14px -10px #000a}
+.hgrid{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 28px;align-items:center}
+.pips{display:flex;gap:6px;align-items:center}
+.pips b{font-size:.9375rem;margin-right:6px;white-space:nowrap}
+.pip{width:22px;height:28px;border-radius:4px;border:2px solid #ffffff73;background:transparent;display:grid;place-items:center;font:700 .6875rem "Courier Prime",monospace;color:var(--slipink)}
+.pip.done{background:var(--slip);border-color:var(--slip)}
+.pip.now{border-color:#fff;box-shadow:0 0 0 2px #ffffff40}
+.meters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 24px}
+.meter{display:flex;flex-direction:column}.meter .row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.9375rem;margin-bottom:4px}.meter .track{margin-top:auto}
+.meter .nm{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px}
+.meter svg{width:18px;height:18px;flex:none}
+.meter .val{flex:none;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .track{height:10px;border-radius:5px;background:#ffffff33;overflow:hidden;margin-top:4px}
-.fill{height:100%;background:var(--slip);border-radius:5px;transition:width .5s ease}
-.delta{font-size:13px;margin-left:6px;padding:0 6px;border-radius:4px;background:#ffffff26}
+.fill{height:100%;background:var(--slip);border-radius:5px;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.meter.low .fill{background:#ff8f86}
+.lowtag{font-size:.75rem;font-weight:700;background:#ff8f86;color:#3b0906;border-radius:4px;padding:0 5px}
+.dchip{font-size:.8125rem;font-weight:700;padding:0 6px;border-radius:4px;white-space:nowrap}
+.dchip.up{background:#c9f7d8;color:#0b3d20}.dchip.dn{background:#ffd3cf;color:#4a0b07}.dchip.z{background:#ffffff2e;color:#fff}
+.pop{animation:pop .4s cubic-bezier(.2,1.5,.5,1)}
+@keyframes pop{from{transform:scale(1.6)}to{transform:scale(1)}}
 main .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,3vw,44px);align-items:start}
-.slip{position:relative;background:var(--slip);color:var(--slipink);border-radius:6px;padding:30px clamp(18px,3vw,34px) 26px;box-shadow:0 1px 0 #0000001a,0 10px 24px -12px #00000066;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,#8ea6e055 33px 34px);background-position:0 74px}
+.slip{position:relative;background:var(--slip);color:var(--slipink);border-radius:6px;padding:30px clamp(18px,3vw,34px) 22px;box-shadow:0 1px 0 #0000001a,0 10px 24px -12px #00000066;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,#8ea6e055 33px 34px);background-position:0 74px}
+.slip.enter{animation:enter .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .slip::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:radial-gradient(circle at 7px 0,var(--bg) 4px,transparent 4.5px) 0 0/14px 10px repeat-x}
-.slip .head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:700 15px/1.3 "Courier Prime",monospace;border-bottom:2px solid var(--slipink);padding-bottom:8px}
-.fields{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;margin:14px 0 0;font:16px/1.7 "Courier Prime",monospace}
+.slip .head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font:700 .9375rem/1.3 "Courier Prime",monospace;border-bottom:2px solid var(--slipink);padding-bottom:8px}
+.fields{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;margin:14px 0 0;font:1rem/1.7 "Courier Prime",monospace}
 .fields dt{font-weight:700}
 .fields dd{margin:0}
-.says{margin:18px 0 0;font-size:clamp(20px,2.4vw,25px);line-height:1.35;font-style:italic;font-weight:500}
-.sys{margin:14px 0 0;font:15px/1.5 "Courier Prime",monospace;border-left:4px solid var(--slipink);padding-left:10px}
-.rule{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;min-height:64px;font:700 16px "Courier Prime",monospace}
-.wait{border:2px dashed #1b1d2266;border-radius:8px;padding:8px 14px;font:400 15px "Courier Prime",monospace;color:#1b1d22aa}
-.stamp{display:inline-block;transform:rotate(-6deg);border:4px solid var(--stamp);color:var(--stamp);border-radius:8px;padding:4px 14px;font-weight:800;font-stretch:70%;font-size:clamp(24px,3.4vw,36px);letter-spacing:.02em;text-transform:uppercase;opacity:.9;mix-blend-mode:multiply;white-space:nowrap}
+.says{margin:18px 0 0;font-size:clamp(1.25rem,2.4vw,1.5625rem);line-height:1.35;font-style:italic;font-weight:500}
+.sys{margin:14px 0 0;font:.9375rem/1.5 "Courier Prime",monospace;border-left:4px solid var(--slipink);padding-left:10px}
+.rule{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;min-height:64px;font:700 1rem "Courier Prime",monospace}
+.wait{border:2px dashed #1b1d2266;border-radius:8px;padding:8px 14px;font:400 .9375rem "Courier Prime",monospace;color:#1b1d22b3}
+.stamp{display:inline-block;transform:rotate(-6deg);border:4px solid var(--stamp);color:var(--stamp);border-radius:8px;padding:4px 14px;font-weight:800;font-stretch:70%;font-size:clamp(1.5rem,3.4vw,2.25rem);letter-spacing:.02em;text-transform:uppercase;opacity:.9;mix-blend-mode:multiply;white-space:nowrap}
 .stamp.hit{animation:thump .35s cubic-bezier(.2,1.4,.5,1)}
 @keyframes thump{from{transform:rotate(-6deg) scale(1.9);opacity:0}to{transform:rotate(-6deg) scale(1);opacity:.9}}
-h2{font-size:24px;line-height:1.15;font-stretch:85%;font-weight:800;margin:0 0 12px}
+.slip.shake{animation:shake .25s ease-out}
+@keyframes shake{25%{transform:translate(-2px,1px)}50%{transform:translate(2px,-1px)}75%{transform:translate(-1px,0)}}
+h2{font-size:1.5rem;line-height:1.15;font-stretch:85%;font-weight:800;margin:0 0 4px}
+.hint{margin:0 0 12px;color:var(--muted);font-size:.9375rem}
 .opts{display:grid;gap:10px}
-.opt{font:inherit;font-size:16px;text-align:left;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:12px 14px;min-height:52px;cursor:pointer}
-.opt:hover:not(:disabled){border-color:var(--band)}
-.opt:focus-visible,.ghost:focus-visible,.go:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
-.opt:disabled{cursor:default;opacity:.45}
+.opt{display:flex;gap:12px;align-items:flex-start;text-align:left;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px 14px;min-height:56px;cursor:pointer;font-size:1rem;box-shadow:0 2px 0 var(--line);transition:transform .08s,border-color .15s}
+.opt:hover:not(:disabled){border-color:var(--band);transform:translateY(-1px)}
+.opt:active:not(:disabled){transform:translateY(1px) scale(.99);box-shadow:none}
+.key{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:6px;border:2px solid var(--line);font-weight:800;font-size:.875rem;color:var(--muted)}
+.opt:focus-visible,.ghost:focus-visible,.go:focus-visible,.alt:focus-visible,.seg button:focus-visible,.x:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
+.opt:disabled{cursor:default;opacity:.45;box-shadow:none}
 .opt.picked{opacity:1;border-color:var(--stamp);background:color-mix(in srgb,var(--stamp) 8%,var(--bg))}
-.note{margin-top:16px;background:var(--panel);border-radius:10px;padding:16px 18px}
+.opt.picked .key{border-color:var(--stamp);background:var(--stamp);color:#fff}
+.tip{display:flex;gap:12px;align-items:flex-start;background:color-mix(in srgb,var(--band) 10%,var(--bg));border:2px solid color-mix(in srgb,var(--band) 45%,var(--bg));border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:.9375rem}
+.tip p{margin:0;flex:1}
+.x{flex:none;border:0;background:transparent;color:var(--link);font-weight:700;cursor:pointer;min-height:32px;padding:0 6px;text-decoration:underline}
+.note{margin-top:14px;background:var(--panel);border-radius:12px;padding:16px 18px}
 .note:empty{display:none}
-.tag{display:inline-block;font-size:14px;font-weight:700;color:var(--band);margin-bottom:4px}
-:root[data-theme=dark] .tag{color:#9fb4ff}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .tag{color:#9fb4ff}}
-.note p{margin:0 0 10px}
+.tag{display:inline-block;font-size:.875rem;font-weight:700;color:var(--link);margin-bottom:6px}
+.note p{margin:0 0 12px}
 .chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
-.chip{font-size:14px;border-radius:6px;padding:2px 8px;background:var(--bg);border:1px solid var(--line);white-space:nowrap}
-.up{color:var(--good)}.dn{color:var(--bad)}
-.go{font:inherit;font-weight:700;font-size:16px;color:#fff;background:var(--band);border:0;border-radius:10px;min-height:48px;padding:0 20px;cursor:pointer}
+.chip{font-size:.875rem;border-radius:6px;padding:2px 8px;background:var(--bg);border:1px solid var(--line);white-space:nowrap}
+.chip.up{color:var(--good)}.chip.dn{color:var(--bad)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.go{font-weight:700;font-size:1rem;color:#fff;background:var(--band);border:0;border-radius:10px;min-height:48px;padding:0 20px;cursor:pointer;box-shadow:0 3px 0 var(--band2)}
 .go:hover{background:var(--band2)}
-.key{border-top:1px solid var(--line)}
-.key .wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 32px;font-size:15px;color:var(--muted)}
-.key b{color:var(--ink);display:block}
-.small{font-size:14px;color:var(--muted);max-width:1240px;margin:0 auto}
-.fig{position:relative;min-height:340px;background:var(--panel);border-radius:10px}
+.go:active{transform:translateY(2px);box-shadow:none}
+.alt{font-weight:600;font-size:1rem;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:10px;min-height:48px;padding:0 16px;cursor:pointer}
+.alt:hover{border-color:var(--ink)}
+kbd{font:700 .75rem Archivo,sans-serif;border:1px solid currentColor;border-radius:4px;padding:0 4px;margin-left:6px;opacity:.75}
+.keyband{border-top:1px solid var(--line)}
+.keyband .wrap{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 32px;font-size:.9375rem;color:var(--muted)}
+.keyband b{color:var(--ink);display:flex;align-items:center;gap:6px}
+.keyband svg{width:18px;height:18px;color:var(--band)}
+.small{font-size:.875rem;color:var(--muted);max-width:1240px;margin:0 auto}
+.fig{position:relative;min-height:340px;background:var(--panel);border-radius:12px}
 .fig>svg{position:absolute;inset:0;width:100%;height:100%}
 svg text{font:14px Archivo,system-ui,sans-serif;fill:var(--ink);paint-order:stroke;stroke:var(--panel);stroke-width:4px}
-.big{font-size:clamp(36px,5vw,52px);line-height:1.05;font-weight:800;font-stretch:75%;margin:0 0 8px;letter-spacing:-.02em}
+.big{font-size:clamp(2.25rem,5vw,3.25rem);line-height:1.05;font-weight:800;font-stretch:75%;margin:0 0 8px;letter-spacing:-.02em}
 .bars{display:grid;gap:12px;margin:18px 0}
-.bar .row{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.bar .row{display:flex;justify-content:space-between;gap:10px;font-size:.9375rem}
 .bar .row span:last-child{flex:none;white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
 .bar .track{background:var(--line);height:14px}
 .bar .fill{background:var(--band)}
 .bar.me .fill{background:var(--stamp)}
 .stack{display:flex;height:22px;border-radius:5px;overflow:hidden;margin-top:6px}
 .stack span{display:block;height:100%}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin-top:6px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.875rem;margin-top:6px;color:var(--muted)}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 .docket{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.mini{background:var(--slip);color:var(--slipink);border-radius:6px;padding:10px 12px;font-size:14px;line-height:1.35}
-.mini b{display:block;font:700 13px "Courier Prime",monospace}
-.mini em{display:inline-block;margin-top:6px;font-style:normal;font-weight:800;font-stretch:75%;color:var(--stamp);border:2px solid var(--stamp);border-radius:4px;padding:0 6px;transform:rotate(-4deg)}
-.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 28px;margin:0;padding:0;list-style:none;counter-reset:r}
-.rules li{counter-increment:r;border-top:3px solid var(--band);padding-top:10px}
-.rules li b{display:block;font-size:18px;font-stretch:85%;margin-bottom:2px}
+.mini{background:var(--slip);color:var(--slipink);border-radius:6px;padding:10px 12px;font-size:.875rem;line-height:1.35;display:flex;flex-direction:column;gap:6px}
+.mini b{font:700 .8125rem "Courier Prime",monospace}
+.mini em{align-self:flex-start;font-style:normal;font-weight:800;font-stretch:75%;color:var(--stamp);border:2px solid var(--stamp);border-radius:4px;padding:0 6px;transform:rotate(-4deg)}
+.mini small{font-size:.8125rem;border-top:1px dashed #1b1d2259;padding-top:6px}
+.rules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 28px;margin:0;padding:0;list-style:none}
+.rules li{border-top:3px solid var(--band);padding-top:10px}
+.rules li b{display:block;font-size:1.125rem;font-stretch:85%;margin-bottom:2px}
 .end .grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(20px,3vw,44px);align-items:stretch}
 .sec{margin-top:clamp(28px,4vw,48px)}
-@media (max-width:900px){.docket{grid-template-columns:repeat(2,minmax(0,1fr))}.rules{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:720px){main .wrap,.end .grid{grid-template-columns:minmax(0,1fr)}.key .wrap{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:600px){.mgrid{gap:6px 12px}.meter .row{font-size:13px;flex-wrap:wrap}.delta{display:none}.rules{grid-template-columns:minmax(0,1fr)}.fields{grid-template-columns:minmax(0,1fr);gap:0}.fields dd{margin-bottom:6px}}
-@media (prefers-reduced-motion:reduce){.stamp.hit{animation:none}.fill{transition:none}}
+.next{background:var(--panel);border-radius:12px;padding:14px 16px;margin-top:16px}
+.sheet{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:16px;background:#0008}
+.sheet[hidden]{display:none}
+.card{background:var(--bg);color:var(--ink);border-radius:14px;padding:20px;width:min(440px,100%);box-shadow:0 20px 50px -20px #000}
+.card h3{margin:0 0 12px;font-size:1.25rem;font-stretch:85%}
+.set{display:grid;gap:6px;margin-bottom:14px}
+.set span{font-weight:700;font-size:.9375rem}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{min-height:44px;padding:0 14px;border-radius:10px;border:2px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.seg button[aria-pressed=true]{border-color:var(--band);background:var(--band);color:#fff}
+.card .actions{justify-content:flex-end;margin-top:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:root[data-motion=off] *{animation:none !important;transition:none !important}
+@media (max-width:900px){.docket{grid-template-columns:repeat(2,minmax(0,1fr))}.rules{grid-template-columns:repeat(2,minmax(0,1fr))}.hgrid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:720px){main .wrap,.end .grid{grid-template-columns:minmax(0,1fr)}.keyband .wrap{grid-template-columns:minmax(0,1fr)}.note .actions{position:sticky;bottom:0;background:var(--panel);padding:10px 0 4px}}
+@media (max-width:600px){.meters{gap:6px 12px}.meter .row{font-size:.8125rem;align-items:flex-start;gap:2px 6px}.dchip{font-size:.75rem;padding:0 4px}.meter svg{display:none}.pip{width:18px;height:24px}.rules{grid-template-columns:minmax(0,1fr)}.fields{grid-template-columns:minmax(0,1fr);gap:0}.fields dd{margin-bottom:6px}kbd,.key{display:none}}
 </style>
 </head>
 <body>
@@ -109,26 +152,54 @@ svg text{font:14px Archivo,system-ui,sans-serif;fill:var(--ink);paint-order:stro
       <h1>You're the HR Manager</h1>
       <p class="lede">Eight corrective-action cases are on your desk: missed shifts, skipped trainings, a broken machine, a friend who keeps showing up late. Every ruling moves three meters. Decide each one, then see where you land as a negotiator.</p>
     </div>
-    <div class="count"><b id="counter">Case 1 of 8</b><button class="ghost" id="restart" type="button">Start over</button></div>
+    <div class="tools">
+      <button class="ghost" id="setbtn" type="button" aria-haspopup="dialog" aria-expanded="false">Settings</button>
+      <button class="ghost" id="restart" type="button">Start over</button>
+    </div>
   </div>
 </header>
-<div id="meters" aria-label="Meters">
-  <div class="mgrid" id="mgrid"></div>
+<div id="hud" aria-label="Progress and meters">
+  <div class="hgrid">
+    <div class="pips" id="pips"></div>
+    <div class="meters" id="meters"></div>
+  </div>
 </div>
 <main class="band" id="game"></main>
-<section class="band key" aria-label="What the meters mean">
+<p class="sr" id="live" aria-live="polite"></p>
+<section class="band keyband" aria-label="What the meters mean">
   <div class="wrap">
-    <div><b>Compliance</b>Did the company get what the policy is for: the coverage, the training, the work.</div>
-    <div><b>Relationships</b>How the employee, and the coworkers watching, feel about how you treated them.</div>
-    <div><b>Precedent</b>Whether your rulings are consistent enough that the next person can predict them.</div>
+    <div><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 13l2 2 4-4"/></svg>Compliance</b>Did the company get what the policy is for: the coverage, the training, the work.</div>
+    <div><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M11 19c0-3 2.5-5 5-5s5 2 5 5"/></svg>Relationships</b>How the employee, and the coworkers watching, feel about how you treated them.</div>
+    <div><b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 21h14M4 8h16M7 8l-3 7h6zM17 8l-3 7h6z"/></svg>Precedent</b>Whether your rulings are consistent enough that the next person can predict them.</div>
   </div>
 </section>
 <footer class="band" style="padding-top:0">
-  <p class="small">Cases are fictional. Each is a workplace version of a settlement type from a student organization's discipline records, with no names or identifying details. The comparison figures are that organization's Winter 2026 records. Made by Dillon Berge for MGMT 455: Influence &amp; Negotiation.</p>
+  <p class="small">Keyboard: press 1 to 4 to pick a ruling, Enter for the next case, U to undo. Cases are fictional. Each is a workplace version of a settlement type from a student organization's discipline records, with no names or identifying details. The comparison figures are that organization's Winter 2026 records. Made by Dillon Berge for MGMT 455: Influence &amp; Negotiation.</p>
 </footer>
+<div class="sheet" id="settings" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="settitle">
+    <h3 id="settitle">Settings</h3>
+    <div class="set"><span>Text size</span><div class="seg" data-k="scale"><button type="button" data-v="1">Normal</button><button type="button" data-v="1.125">Large</button><button type="button" data-v="1.25">Larger</button></div></div>
+    <div class="set"><span>Motion</span><div class="seg" data-k="motion"><button type="button" data-v="on">On</button><button type="button" data-v="off">Reduced</button></div></div>
+    <div class="set"><span>Stamp sound</span><div class="seg" data-k="sound"><button type="button" data-v="off">Off</button><button type="button" data-v="on">On</button></div></div>
+    <p class="hint">Settings and your progress are saved in this browser.</p>
+    <div class="actions"><button type="button" class="go" id="setdone">Done</button></div>
+  </div>
+</div>
+<div class="sheet" id="confirm" hidden>
+  <div class="card" role="alertdialog" aria-modal="true" aria-labelledby="ctitle">
+    <h3 id="ctitle">Start over?</h3>
+    <p class="hint">Your rulings and meters will reset to Case 1.</p>
+    <div class="actions"><button type="button" class="alt" id="cno">Keep playing</button><button type="button" class="go" id="cyes">Start over</button></div>
+  </div>
+</div>
 <script>
 {
 const N = ["Compliance", "Relationships", "Precedent"];
+const ICON = [
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9zM9 13l2 2 4-4"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 19c0-3 2.5-5 5-5s5 2 5 5M11 19c0-3 2.5-5 5-5s5 2 5 5"/></svg>',
+  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3v18M5 21h14M4 8h16M7 8l-3 7h6zM17 8l-3 7h6z"/></svg>'];
 const labor2 = s => s.picks[1] === 0 || s.picks[1] === 2;
 const CASES = [
   {no: "0141", title: "Missed a required Saturday inventory count", act: "Attendance point",
@@ -219,56 +290,129 @@ const CASES = [
 const CH = {total: 171, paid: 56, upheld: 12, dismissed: 103};
 const $ = id => document.getElementById(id);
 const clamp = v => Math.max(0, Math.min(100, v));
-let S = {i: 0, m: [50, 50, 50], picks: [], last: null};
+const sum = d => d[0] + d[1] + d[2];
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+};
+const fresh = () => ({i: 0, m: [50, 50, 50], picks: [], hist: [], last: null});
+let S = fresh();
+let reduce = false;
+try { reduce = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+let P = Object.assign({scale: "1", motion: reduce ? "off" : "on", sound: "off"}, store.get("hrgame.settings", {}));
+let tips = store.get("hrgame.tips", false);
+let ac = null;
 
-function meters(d) {
-  $("mgrid").innerHTML = N.map((name, j) => {
-    const dv = d ? d[j] : 0;
-    const chip = d ? `<span class="delta">${dv > 0 ? "+" : ""}${dv}</span>` : "";
-    return `<div class="meter"><div class="row"><span>${name}${chip}</span><span>${S.m[j]}</span></div>
-      <div class="track" role="meter" aria-label="${name}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${S.m[j]}"><div class="fill" style="width:${S.m[j]}%"></div></div></div>`;
+function applySettings() {
+  const r = document.documentElement;
+  r.style.setProperty("--scale", P.scale);
+  r.dataset.motion = P.motion;
+  document.querySelectorAll(".seg").forEach(g => g.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(P[g.dataset.k] === b.dataset.v))));
+  store.set("hrgame.settings", P);
+}
+function save() { store.set("hrgame.state", S); }
+function say(t) { $("live").textContent = t; }
+function thud() {
+  if (P.sound !== "on") return;
+  try {
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    const t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain();
+    o.type = "sine"; o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(48, t + 0.16);
+    g.gain.setValueAtTime(0.45, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.22);
+    o.connect(g).connect(ac.destination); o.start(t); o.stop(t + 0.24);
+    const b = ac.createBuffer(1, Math.floor(ac.sampleRate * 0.05), ac.sampleRate), d = b.getChannelData(0);
+    for (let k = 0; k < d.length; k++) d[k] = (Math.random() * 2 - 1) * (1 - k / d.length);
+    const n = ac.createBufferSource(), g2 = ac.createGain(); n.buffer = b; g2.gain.value = 0.2;
+    n.connect(g2).connect(ac.destination); n.start(t);
+  } catch (e) {}
+}
+const arrow = v => v > 0 ? "▲ +" + v : v < 0 ? "▼ " + v : "0";
+const cls = v => v > 0 ? "up" : v < 0 ? "dn" : "z";
+
+function hud(d) {
+  const done = S.i >= CASES.length;
+  $("pips").innerHTML = `<b>${done ? "All 8 ruled" : `Case ${S.i + 1} of ${CASES.length}`}</b>` + CASES.map((c, k) => {
+    const ruled = S.picks[k] != null;
+    return `<span class="pip${ruled ? " done" : ""}${k === S.i ? " now" : ""}" title="Case ${k + 1}: ${c.title}${ruled ? " (ruled)" : ""}">${ruled ? "✓" : ""}</span>`;
+  }).join("");
+  $("meters").innerHTML = N.map((name, j) => {
+    const v = S.m[j], low = v < 30;
+    const chip = d ? `<span class="dchip ${cls(d[j])}${d[j] ? " pop" : ""}">${arrow(d[j])}</span>` : "";
+    return `<div class="meter${low ? " low" : ""}"><div class="row"><span class="nm">${ICON[j]}${name}${chip}</span><span class="val">${low ? '<span class="lowtag">Low</span> ' : ""}${v}</span></div>
+      <div class="track" role="meter" aria-label="${name}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${v}"><div class="fill" style="width:${v}%"></div></div></div>`;
   }).join("");
 }
 
-function renderCase() {
+function renderCase(enter) {
   const c = CASES[S.i], opts = c.opts(S), pick = S.picks[S.i];
-  $("counter").textContent = `Case ${S.i + 1} of ${CASES.length}`;
-  const o = pick != null ? opts[pick] : null;
+  const o = pick != null ? opts[pick] : null, fresh = S.last === S.i;
+  const showTip = !tips && S.i === 0;
+  const tip = showTip ? `<div class="tip" id="tip"><p>${o ? "Your ruling is stamped. Read why the meters moved, then go to the next case. Changed your mind? Undo it." : "Pick a ruling. Each choice moves the three meters at the top, and there's a short explanation after."}</p><button type="button" class="x" id="tipx">Got it</button></div>` : "";
   $("game").innerHTML = `<div class="wrap">
-    <article class="slip" aria-label="Corrective action form">
+    <article class="slip${enter ? " enter" : ""}${fresh ? " shake" : ""}" aria-label="Corrective action form">
       <div class="head"><span>Human Resources</span><span>Corrective action No. ${c.no}</span></div>
-      <dl class="fields"><dt>Employee</dt><dd>Team member (name withheld)</dd><dt>Issue</dt><dd>${c.title}</dd><dt>Proposed</dt><dd>${c.act}</dd><dt>Status</dt><dd>${o ? "Ruled" : "Unresolved"}</dd></dl>
+      <dl class="fields"><dt>Employee</dt><dd>Team member (name withheld)</dd><dt>Issue</dt><dd>${c.title}</dd><dt>Proposed</dt><dd>${c.act}</dd><dt>Status</dt><dd>${o ? "Ruled" : "Open"}</dd></dl>
       <p class="says">${c.says(S)}</p>
       ${c.sys ? `<p class="sys">${c.sys}</p>` : ""}
-      <div class="rule"><span>Ruling</span>${o ? `<span class="stamp${S.last === S.i ? " hit" : ""}">${o.s}</span>` : `<span class="wait">Awaiting your ruling</span>`}</div>
+      <div class="rule"><span>Ruling</span>${o ? `<span class="stamp${fresh ? " hit" : ""}">${o.s}</span>` : `<span class="wait">Awaiting your ruling</span>`}</div>
     </article>
     <div>
       <h2>Your ruling</h2>
-      <div class="opts">${opts.map((x, j) => `<button type="button" class="opt${pick === j ? " picked" : ""}" data-j="${j}" ${pick != null ? "disabled" : ""}>${x.t}</button>`).join("")}</div>
-      <div class="note" id="note" aria-live="polite">${o ? `<span class="tag">${o.c}</span>
-        <div class="chips">${o.d.map((v, j) => `<span class="chip ${v > 0 ? "up" : v < 0 ? "dn" : ""}">${N[j]} ${v > 0 ? "+" : ""}${v}</span>`).join("")}</div>
+      <p class="hint">${o ? "Ruling made." : `Choose one of ${opts.length}.`}</p>
+      ${tip}
+      <div class="opts">${opts.map((x, j) => `<button type="button" class="opt${pick === j ? " picked" : ""}" data-j="${j}" ${pick != null ? "disabled" : ""}><span class="key">${j + 1}</span><span>${x.t}</span></button>`).join("")}</div>
+      <div class="note" id="note">${o ? `<span class="tag">${o.c}</span>
+        <div class="chips">${o.d.map((v, j) => `<span class="chip ${v > 0 ? "up" : v < 0 ? "dn" : ""}">${N[j]} ${arrow(v)}</span>`).join("")}</div>
         <p>${o.n}</p>
-        <button type="button" class="go" id="next">${S.i + 1 < CASES.length ? "Next case" : "Close the case files"}</button>` : ""}</div>
+        <div class="actions"><button type="button" class="go" id="next">${S.i + 1 < CASES.length ? "Next case" : "See your results"}<kbd>Enter</kbd></button><button type="button" class="alt" id="undo">Undo<kbd>U</kbd></button></div>` : ""}</div>
     </div></div>`;
-  meters(o && S.last === S.i ? o.d : null);
+  hud(o && fresh ? o.d : null);
 }
 
 function choose(j) {
-  const o = CASES[S.i].opts(S)[j];
+  if (S.i >= CASES.length || S.picks[S.i] != null) return;
+  const opts = CASES[S.i].opts(S);
+  if (j < 0 || j >= opts.length) return;
+  const o = opts[j];
+  S.hist[S.i] = S.m.slice();
   S.picks[S.i] = j;
   S.m = S.m.map((v, k) => clamp(v + o.d[k]));
   S.last = S.i;
-  renderCase();
+  thud();
+  renderCase(false);
+  save();
+  say(`Ruling: ${o.s}. ` + N.map((n, k) => `${n} ${o.d[k] > 0 ? "up " + o.d[k] : o.d[k] < 0 ? "down " + (-o.d[k]) : "unchanged"}`).join(", ") + ".");
   const nx = $("next");
   if (nx) nx.focus({preventScroll: true});
 }
+function undo() {
+  if (S.i >= CASES.length || S.picks[S.i] == null) return;
+  S.m = S.hist[S.i] || S.m;
+  S.picks[S.i] = null;
+  S.last = null;
+  renderCase(false);
+  save();
+  say("Ruling undone.");
+  const f = document.querySelector(".opt");
+  if (f) f.focus({preventScroll: true});
+}
+function next() {
+  if (S.i >= CASES.length || S.picks[S.i] == null) return;
+  S.i++;
+  S.last = null;
+  render(true);
+  save();
+  const top = $("game").getBoundingClientRect().top + scrollY - $("hud").offsetHeight;
+  if (scrollY > top) window.scrollTo({top, behavior: P.motion === "on" ? "smooth" : "auto"});
+  say(S.i < CASES.length ? `Case ${S.i + 1}: ${CASES[S.i].title}.` : "Results.");
+}
 
 function style(c, r) {
-  if (c >= 40 && c <= 60 && r >= 40 && r <= 60) return ["Compromising", "The splitter", "You met in the middle on most cases. Safe, but trades that helped both the company and the employee were usually on the table."];
-  if (c >= 50 && r >= 50) return ["Integrating", "The dealmaker", "You kept the work getting done and kept people on your side: high concern for the company and for the employee. That corner is where penalties turn into trades."];
-  if (c >= 50) return ["Dominating", "The hammer", "The policy held, but people paid for it in goodwill. Expect more pushback and fewer people owning up."];
-  if (r >= 50) return ["Obliging", "The soft touch", "People like you, but the company kept losing coverage and finished work. Your penalties stopped working as leverage."];
-  return ["Avoiding", "The empty office", "Neither the company nor its people came out ahead. Most rulings cost something and bought nothing back."];
+  if (c >= 40 && c <= 60 && r >= 40 && r <= 60) return ["Compromising", "The splitter", "You met in the middle on most cases. Safe, but trades that helped both the company and the employee were usually on the table.", "Next run, skip the middle option and look for the trade that helps both sides."];
+  if (c >= 50 && r >= 50) return ["Integrating", "The dealmaker", "You kept the work getting done and kept people on your side: high concern for the company and for the employee. That corner is where penalties turn into trades.", "Next run, play it strictly and see what the hammer costs you."];
+  if (c >= 50) return ["Dominating", "The hammer", "The policy held, but people paid for it in goodwill. Expect more pushback and fewer people owning up.", "Next run, trade instead of punishing and watch Relationships."];
+  if (r >= 50) return ["Obliging", "The soft touch", "People like you, but the company kept losing coverage and finished work. Your penalties stopped working as leverage.", "Next run, hold the line once or twice and watch Compliance."];
+  return ["Avoiding", "The empty office", "Neither the company nor its people came out ahead. Most rulings cost something and bought nothing back.", "Next run, pick the ruling that gets the work done and see what changes."];
 }
 
 function plot() {
@@ -291,14 +435,19 @@ function plot() {
 }
 
 function renderEnd() {
-  $("counter").textContent = "Desk cleared";
-  meters(null);
-  const res = CASES.map((c, i) => c.opts(S)[S.picks[i]]);
+  hud(null);
+  const res = CASES.map((c, k) => c.opts(S)[S.picks[k]]);
   const soft = res.filter(o => o.k === "dismissed" || o.k === "deal").length;
   const pct = Math.round(soft / CASES.length * 100);
-  const [c, r, p] = S.m, [sty, nick, why] = style(c, r);
+  const [c, r, p] = S.m, [sty, nick, why, tryNext] = style(c, r);
   const prec = p >= 65 ? "People can predict your rulings, so fewer of them will argue." : p >= 40 ? "Some of your rulings will get cited against you." : "Expect to hear \"everyone else got a deal\" a lot.";
   const sh = k => Math.round(CH[k] / CH.total * 100);
+  const missed = CASES.map((cs, k) => {
+    const opts = cs.opts(S), mine = res[k];
+    const best = opts.reduce((a, b) => sum(b.d) > sum(a.d) ? b : a);
+    return best !== mine && sum(best.d) > sum(mine.d) ? best : null;
+  });
+  const nBest = missed.filter(m => !m).length;
   $("game").innerHTML = `<div class="wrap end" style="display:block">
     <div class="grid">
       <div class="fig" aria-label="Dual Concerns plot with your position"><svg id="dc" role="img" aria-label="Your position: compliance ${c}, relationships ${r}"></svg></div>
@@ -314,11 +463,13 @@ function renderEnd() {
           <span style="width:${CH.paid / CH.total * 100}%;background:var(--band)"></span><span style="width:${CH.upheld / CH.total * 100}%;background:var(--stamp)"></span><span style="width:${CH.dismissed / CH.total * 100}%;background:var(--slip)"></span>
         </div>
         <div class="legend"><span><i style="background:var(--band)"></i>Paid ${CH.paid} (${sh("paid")}%)</span><span><i style="background:var(--stamp)"></i>Upheld, still owed ${CH.upheld} (${sh("upheld")}%)</span><span><i style="background:var(--slip)"></i>Dismissed ${CH.dismissed} (${sh("dismissed")}%)</span></div>
+        <div class="next"><b>Try this next.</b> ${tryNext}</div>
       </div>
     </div>
-    <div class="sec"><h2>Your case files</h2><div class="docket">${CASES.map((cs, i) => `<div class="mini"><b>No. ${cs.no}</b>${cs.title}<br><em>${res[i].s}</em></div>`).join("")}</div></div>
+    <div class="sec"><h2>Your case files</h2><p class="hint">You picked the highest-scoring ruling in ${nBest} of 8 cases. Where you didn't, the stronger option is listed.</p>
+      <div class="docket">${CASES.map((cs, k) => `<div class="mini"><b>No. ${cs.no}</b><span>${cs.title}</span><em>${res[k].s}</em>${missed[k] ? `<small>Stronger: ${missed[k].t}</small>` : ""}</div>`).join("")}</div></div>
     <div class="sec"><h2>Six rules for anyone who enforces rules on people they work with</h2>
-      <p style="margin:-4px 0 14px;color:var(--muted)">Managers, HR, shift leads, team captains: anyone who has to enforce a rule on someone they'll see tomorrow.</p>
+      <p class="hint">Managers, HR, shift leads, team captains: anyone who has to enforce a rule on someone they'll see tomorrow.</p>
       <ol class="rules">
         <li><b>Treat the penalty as an opening bid</b>Ask what the team needs, then trade the penalty for it.</li>
         <li><b>Trade, don't give</b>If you waive a penalty, get the coverage, the training or the repair in return.</li>
@@ -332,23 +483,54 @@ function renderEnd() {
   plot();
 }
 
-function render() { S.i >= CASES.length ? renderEnd() : renderCase(); }
+function render(enter) { S.i >= CASES.length ? renderEnd() : renderCase(enter); }
+function reset() { S = fresh(); save(); render(true); window.scrollTo({top: 0}); say("New game. Case 1."); }
+function openSheet(id) { $(id).hidden = false; const b = $(id).querySelector("button"); if (b) b.focus(); if (id === "settings") $("setbtn").setAttribute("aria-expanded", "true"); }
+function closeSheet(id) { $(id).hidden = true; if (id === "settings") { $("setbtn").setAttribute("aria-expanded", "false"); $("setbtn").focus(); } }
 
 $("game").addEventListener("click", e => {
   const b = e.target.closest("button");
   if (!b) return;
-  if (b.classList.contains("opt") && S.picks[S.i] == null) choose(+b.dataset.j);
-  else if (b.id === "next") { S.i++; S.last = null; render(); window.scrollTo({top: 0, behavior: "smooth"}); }
+  if (b.classList.contains("opt")) choose(+b.dataset.j);
+  else if (b.id === "next") next();
+  else if (b.id === "undo") undo();
   else if (b.id === "again") reset();
+  else if (b.id === "tipx") { tips = true; store.set("hrgame.tips", true); const t = $("tip"); if (t) t.remove(); }
 });
-function reset() { S = {i: 0, m: [50, 50, 50], picks: [], last: null}; render(); window.scrollTo({top: 0}); }
-$("restart").addEventListener("click", reset);
+$("restart").addEventListener("click", () => openSheet("confirm"));
+$("cno").addEventListener("click", () => closeSheet("confirm"));
+$("cyes").addEventListener("click", () => { closeSheet("confirm"); reset(); });
+$("setbtn").addEventListener("click", () => openSheet("settings"));
+$("setdone").addEventListener("click", () => closeSheet("settings"));
+document.querySelectorAll(".sheet").forEach(sh => sh.addEventListener("click", e => { if (e.target === sh) closeSheet(sh.id); }));
+document.querySelectorAll(".seg").forEach(g => g.addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  P[g.dataset.k] = b.dataset.v;
+  applySettings();
+  if (g.dataset.k === "sound" && P.sound === "on") thud();
+  plot();
+}));
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const open = !$("settings").hidden ? "settings" : !$("confirm").hidden ? "confirm" : null;
+  if (e.key === "Escape" && open) { closeSheet(open); return; }
+  if (open) return;
+  const t = e.target;
+  if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA")) return;
+  if (/^[1-4]$/.test(e.key)) { choose(+e.key - 1); e.preventDefault(); }
+  else if (e.key === "Enter" && S.i < CASES.length && S.picks[S.i] != null && !(t && t.tagName === "BUTTON" && t.id !== "next")) { next(); e.preventDefault(); }
+  else if (e.key === "u" || e.key === "U") undo();
+});
 const ro = new ResizeObserver(() => plot());
 ro.observe(document.body);
 
+function valid(d) { return d && typeof d.i === "number" && Array.isArray(d.m) && d.m.length === 3 && Array.isArray(d.picks) && d.i >= 0 && d.i <= CASES.length; }
 function start(data) {
-  if (data && Array.isArray(data.m) && Array.isArray(data.picks) && typeof data.i === "number") S = {i: data.i, m: data.m, picks: data.picks, last: null};
-  render();
+  const saved = valid(data) ? data : store.get("hrgame.state", null);
+  if (valid(saved)) S = {i: saved.i, m: saved.m.map(clamp), picks: saved.picks, hist: Array.isArray(saved.hist) ? saved.hist : [], last: null};
+  applySettings();
+  render(false);
 }
 window.claude?.hot?.snapshot?.(() => S);
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
