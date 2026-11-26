@@ -11,10 +11,10 @@
 /* VOICE everyday learning game, plainspoken, a little wry
    IDEA the HR manager's desk: a canary carbon corrective-action form you rule on with a red rubber stamp
    PICTURE the form, large, stamped by your ruling; a HUD of case pips and three meters; at the end a Dual Concerns plot and your stack of stamped forms
-   COLOUR cobalt header and HUD, white desk, canary forms, red stamp ink
+   COLOUR Oregon State palette: Beaver Orange header and buttons, charcoal HUD, white desk, Candela forms, orange stamp ink, Luminance meters, Stratosphere accents
    TYPE Archivo (condensed for display) + Archivo text + Courier Prime for typed form fields
    LAYOUT laptop: title band, sticky HUD, form left and ruling right; phone: title, HUD, form, ruling, sticky action row */
-:root{color-scheme:light dark;--scale:1;--bg:light-dark(#ffffff,#0f1115);--ink:light-dark(#14161a,#eceef2);--muted:light-dark(#555b65,#a5abb6);--band:light-dark(#1f47c8,#18348f);--band2:light-dark(#1a3db0,#132a75);--panel:light-dark(#f3f5fa,#171a21);--line:light-dark(#cfd5e1,#2f3541);--slip:#ffe48a;--slipink:#1b1d22;--stamp:#c81e24;--good:light-dark(#0f6b37,#6fdc9a);--bad:light-dark(#b3261e,#ff8f86);--link:light-dark(#1f47c8,#9fb4ff)}
+:root{color-scheme:light dark;--scale:1;--bg:light-dark(#ffffff,#121212);--ink:light-dark(#111111,#f2f2f2);--muted:light-dark(#555555,#b3b3b3);--band:#D73F09;--band2:#222222;--sun:#FFB500;--sea:#006A8E;--panel:light-dark(#f4f4f2,#1d1d1d);--line:light-dark(#d4d4d0,#353535);--slip:#FDD26E;--slipink:#1b1b1b;--stamp:#D73F09;--good:light-dark(#4A773C,#C4D6A4);--bad:light-dark(#D73F09,#D3832B);--link:light-dark(#006A8E,#B8DDE1)}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
 html{font-size:calc(16px * var(--scale))}
@@ -27,7 +27,7 @@ button{font:inherit}
 header.band{background:var(--band);color:#fff;padding-bottom:16px}
 .top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 32px}
 h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.05;letter-spacing:-.02em;font-weight:800;font-stretch:75%;margin:0;text-wrap:balance}
-.lede{margin:8px 0 0;max-width:60ch;color:#e3e9ff;font-size:1.0625rem}
+.lede{margin:8px 0 0;max-width:60ch;color:#fff;font-size:1.0625rem}
 .tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .ghost{color:#fff;background:transparent;border:2px solid #ffffff8c;border-radius:10px;min-height:44px;padding:0 14px;cursor:pointer;font-size:.9375rem}
 .ghost:hover{border-color:#fff;background:#ffffff14}
@@ -37,7 +37,7 @@ h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.05;letter-spacing:-.02em;font
 .pips{display:flex;gap:6px;align-items:center}
 .pips b{font-size:.9375rem;margin-right:6px;white-space:nowrap}
 .pip{width:22px;height:28px;border-radius:4px;border:2px solid #ffffff73;background:transparent;display:grid;place-items:center;font:700 .6875rem "Courier Prime",monospace;color:var(--slipink)}
-.pip.done{background:var(--slip);border-color:var(--slip)}
+.pip.done{background:var(--sun);border-color:var(--sun)}
 .pip.now{border-color:#fff;box-shadow:0 0 0 2px #ffffff40}
 .meters{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 24px}
 .meter{display:flex;flex-direction:column}.meter .row{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.9375rem;margin-bottom:4px}.meter .track{margin-top:auto}
@@ -45,15 +45,15 @@ h1{font-size:clamp(2rem,5vw,3.25rem);line-height:1.05;letter-spacing:-.02em;font
 .meter svg{width:18px;height:18px;flex:none}
 .meter .val{flex:none;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
 .track{height:10px;border-radius:5px;background:#ffffff33;overflow:hidden;margin-top:4px}
-.fill{height:100%;background:var(--slip);border-radius:5px;transition:width .45s cubic-bezier(.2,.8,.2,1)}
-.meter.low .fill{background:#ff8f86}
-.lowtag{font-size:.75rem;font-weight:700;background:#ff8f86;color:#3b0906;border-radius:4px;padding:0 5px}
+.fill{height:100%;background:var(--sun);border-radius:5px;transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.meter.low .fill{background:var(--band)}
+.lowtag{font-size:.75rem;font-weight:700;background:var(--band);color:#fff;border-radius:4px;padding:0 5px}
 .dchip{font-size:.8125rem;font-weight:700;padding:0 6px;border-radius:4px;white-space:nowrap}
-.dchip.up{background:#c9f7d8;color:#0b3d20}.dchip.dn{background:#ffd3cf;color:#4a0b07}.dchip.z{background:#ffffff2e;color:#fff}
+.dchip.up{background:#C4D6A4;color:#111}.dchip.dn{background:#D73F09;color:#fff}.dchip.z{background:#ffffff2e;color:#fff}
 .pop{animation:pop .4s cubic-bezier(.2,1.5,.5,1)}
 @keyframes pop{from{transform:scale(1.6)}to{transform:scale(1)}}
 main .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,3vw,44px);align-items:start}
-.slip{position:relative;background:var(--slip);color:var(--slipink);border-radius:6px;padding:30px clamp(18px,3vw,34px) 22px;box-shadow:0 1px 0 #0000001a,0 10px 24px -12px #00000066;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,#8ea6e055 33px 34px);background-position:0 74px}
+.slip{position:relative;background:var(--slip);color:var(--slipink);border-radius:6px;padding:30px clamp(18px,3vw,34px) 22px;box-shadow:0 1px 0 #0000001a,0 10px 24px -12px #00000066;background-image:repeating-linear-gradient(to bottom,transparent 0 33px,#006a8e2e 33px 34px);background-position:0 74px}
 .slip.enter{animation:enter .35s cubic-bezier(.2,.8,.2,1)}
 @keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 .slip::before{content:"";position:absolute;left:0;right:0;top:0;height:10px;background:radial-gradient(circle at 7px 0,var(--bg) 4px,transparent 4.5px) 0 0/14px 10px repeat-x}
@@ -65,9 +65,9 @@ main .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:
 .sys{margin:14px 0 0;font:.9375rem/1.5 "Courier Prime",monospace;border-left:4px solid var(--slipink);padding-left:10px}
 .rule{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:18px;min-height:64px;font:700 1rem "Courier Prime",monospace}
 .wait{border:2px dashed #1b1d2266;border-radius:8px;padding:8px 14px;font:400 .9375rem "Courier Prime",monospace;color:#1b1d22b3}
-.stamp{display:inline-block;transform:rotate(-6deg);border:4px solid var(--stamp);color:var(--stamp);border-radius:8px;padding:4px 14px;font-weight:800;font-stretch:70%;font-size:clamp(1.5rem,3.4vw,2.25rem);letter-spacing:.02em;text-transform:uppercase;opacity:.9;mix-blend-mode:multiply;white-space:nowrap}
+.stamp{display:inline-block;transform:rotate(-6deg);border:4px solid var(--stamp);color:var(--stamp);border-radius:8px;padding:4px 14px;font-weight:800;font-stretch:70%;font-size:clamp(1.5rem,3.4vw,2.25rem);letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
 .stamp.hit{animation:thump .35s cubic-bezier(.2,1.4,.5,1)}
-@keyframes thump{from{transform:rotate(-6deg) scale(1.9);opacity:0}to{transform:rotate(-6deg) scale(1);opacity:.9}}
+@keyframes thump{from{transform:rotate(-6deg) scale(1.9);opacity:0}to{transform:rotate(-6deg) scale(1);opacity:1}}
 .slip.shake{animation:shake .25s ease-out}
 @keyframes shake{25%{transform:translate(-2px,1px)}50%{transform:translate(2px,-1px)}75%{transform:translate(-1px,0)}}
 h2{font-size:1.5rem;line-height:1.15;font-stretch:85%;font-weight:800;margin:0 0 4px}
@@ -79,9 +79,9 @@ h2{font-size:1.5rem;line-height:1.15;font-stretch:85%;font-weight:800;margin:0 0
 .key{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:6px;border:2px solid var(--line);font-weight:800;font-size:.875rem;color:var(--muted)}
 .opt:focus-visible,.ghost:focus-visible,.go:focus-visible,.alt:focus-visible,.seg button:focus-visible,.x:focus-visible{outline:3px solid var(--stamp);outline-offset:2px}
 .opt:disabled{cursor:default;opacity:.45;box-shadow:none}
-.opt.picked{opacity:1;border-color:var(--stamp);background:color-mix(in srgb,var(--stamp) 8%,var(--bg))}
+.opt.picked{opacity:1;border-color:var(--stamp);background:var(--panel)}
 .opt.picked .key{border-color:var(--stamp);background:var(--stamp);color:#fff}
-.tip{display:flex;gap:12px;align-items:flex-start;background:color-mix(in srgb,var(--band) 10%,var(--bg));border:2px solid color-mix(in srgb,var(--band) 45%,var(--bg));border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:.9375rem}
+.tip{display:flex;gap:12px;align-items:flex-start;background:var(--panel);border:2px solid var(--sun);border-radius:12px;padding:12px 14px;margin:0 0 12px;font-size:.9375rem}
 .tip p{margin:0;flex:1}
 .x{flex:none;border:0;background:transparent;color:var(--link);font-weight:700;cursor:pointer;min-height:32px;padding:0 6px;text-decoration:underline}
 .note{margin-top:14px;background:var(--panel);border-radius:12px;padding:16px 18px}
@@ -92,8 +92,8 @@ h2{font-size:1.5rem;line-height:1.15;font-stretch:85%;font-weight:800;margin:0 0
 .chip{font-size:.875rem;border-radius:6px;padding:2px 8px;background:var(--bg);border:1px solid var(--line);white-space:nowrap}
 .chip.up{color:var(--good)}.chip.dn{color:var(--bad)}
 .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.go{font-weight:700;font-size:1rem;color:#fff;background:var(--band);border:0;border-radius:10px;min-height:48px;padding:0 20px;cursor:pointer;box-shadow:0 3px 0 var(--band2)}
-.go:hover{background:var(--band2)}
+.go{font-weight:700;font-size:1rem;color:#fff;background:var(--band);border:0;border-radius:10px;min-height:48px;padding:0 20px;cursor:pointer;box-shadow:0 3px 0 #000}
+.go:hover{background:var(--ink);color:var(--bg)}
 .go:active{transform:translateY(2px);box-shadow:none}
 .alt{font-weight:600;font-size:1rem;color:var(--ink);background:transparent;border:2px solid var(--line);border-radius:10px;min-height:48px;padding:0 16px;cursor:pointer}
 .alt:hover{border-color:var(--ink)}
@@ -111,7 +111,7 @@ svg text{font:14px Archivo,system-ui,sans-serif;fill:var(--ink);paint-order:stro
 .bar .row{display:flex;justify-content:space-between;gap:10px;font-size:.9375rem}
 .bar .row span:last-child{flex:none;white-space:nowrap;font-weight:700;font-variant-numeric:tabular-nums}
 .bar .track{background:var(--line);height:14px}
-.bar .fill{background:var(--band)}
+.bar .fill{background:var(--sea)}
 .bar.me .fill{background:var(--stamp)}
 .stack{display:flex;height:22px;border-radius:5px;overflow:hidden;margin-top:6px}
 .stack span{display:block;height:100%}
@@ -460,9 +460,9 @@ function renderEnd() {
         </div>
         <p style="margin:0">Where these cases come from: I chair the discipline committee of a student organization. In Winter 2026 it logged 171 fines, mostly $10, and dismissed 60% of them. That looks soft until you read the notes, which show the same deals over and over: work instead of cash, a late finish, partial credit, a repair. A penalty works like an opening bid. It gives whoever enforces the rule leverage to trade for what the group needs, at a club or at a company.</p>
         <div class="stack" aria-label="How the committee's 171 Winter 2026 fines ended">
-          <span style="width:${CH.paid / CH.total * 100}%;background:var(--band)"></span><span style="width:${CH.upheld / CH.total * 100}%;background:var(--stamp)"></span><span style="width:${CH.dismissed / CH.total * 100}%;background:var(--slip)"></span>
+          <span style="width:${CH.paid / CH.total * 100}%;background:var(--sea)"></span><span style="width:${CH.upheld / CH.total * 100}%;background:var(--stamp)"></span><span style="width:${CH.dismissed / CH.total * 100}%;background:var(--sun)"></span>
         </div>
-        <div class="legend"><span><i style="background:var(--band)"></i>Paid ${CH.paid} (${sh("paid")}%)</span><span><i style="background:var(--stamp)"></i>Upheld, still owed ${CH.upheld} (${sh("upheld")}%)</span><span><i style="background:var(--slip)"></i>Dismissed ${CH.dismissed} (${sh("dismissed")}%)</span></div>
+        <div class="legend"><span><i style="background:var(--sea)"></i>Paid ${CH.paid} (${sh("paid")}%)</span><span><i style="background:var(--stamp)"></i>Upheld, still owed ${CH.upheld} (${sh("upheld")}%)</span><span><i style="background:var(--sun)"></i>Dismissed ${CH.dismissed} (${sh("dismissed")}%)</span></div>
         <div class="next"><b>Try this next.</b> ${tryNext}</div>
       </div>
     </div>
